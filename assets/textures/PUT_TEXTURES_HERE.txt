@@ -1,2 +1,0 @@
-Place optimized WebP/JPEG textures here when needed.
-Keep source textures reasonably sized for mobile.
