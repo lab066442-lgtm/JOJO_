@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Memory Vault ❤️</title>
+  <style>
+    :root {
+      --bg-color: #0d060a;
+      --card-bg: #1a0c14;
+      --accent: #ff477e;
+      --accent-hover: #ff2e63;
+      --text: #ffffff;
+      --text-sub: #f8c8dc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 15px;
+      gap: 50px;
+      overflow-x: hidden;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 71, 126, 0.2);
+      border-radius: 20px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      color: var(--text-sub);
+      margin-bottom: 20px;
+    }
+
+    /* --- Section 1: Secret Passcode & Gifts --- */
+    .pin-display {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .pin-dot {
+      width: 15px;
+      height: 15px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+    }
+
+    .pin-dot.filled {
+      background-color: var(--accent);
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 250px;
+      margin: 0 auto;
+    }
+
+    .key-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .key-btn:active {
+      background: var(--accent);
+    }
+
+    .gifts-container {
+      display: none;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .gift-box {
+      font-size: 40px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.2);
+    }
+
+    /* --- Section 2: Bloom Flower --- */
+    .flower-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .stem {
+      width: 6px;
+      height: 0;
+      background: #2e7d32;
+      border-radius: 3px;
+      transition: height 1.5s ease-in-out;
+    }
+
+    .petal {
+      position: absolute;
+      top: 30px;
+      width: 35px;
+      height: 60px;
+      background: var(--accent);
+      border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+      transform-origin: bottom center;
+      opacity: 0;
+      transition: all 1s ease-out;
+      box-shadow: 0 0 12px rgba(255, 71, 126, 0.6);
+    }
+
+    .action-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* --- Section 3: Cupid Game --- */
+    .game-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 15px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      position: relative;
+      height: 45px;
+    }
+
+    #noBtn {
+      position: absolute;
+      background: #555;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* --- Section 4: Particle Heart --- */
+    .particle-canvas {
+      width: 100%;
+      height: 250px;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- القسم الأول: رمز السر والهدايا -->
+  <div class="section-card">
+    <div class="section-title">أدخلي رمز السر الخاص بنا 🔐</div>
+    <div id="passcodeArea">
+      <div class="pin-display">
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+        <div class="pin-dot"></div>
+      </div>
+      <div class="keypad">
+        <button class="key-btn" onclick="pressKey('1')">1</button>
+        <button class="key-btn" onclick="pressKey('2')">2</button>
+        <button class="key-btn" onclick="pressKey('3')">3</button>
+        <button class="key-btn" onclick="pressKey('4')">4</button>
+        <button class="key-btn" onclick="pressKey('5')">5</button>
+        <button class="key-btn" onclick="pressKey('6')">6</button>
+        <button class="key-btn" onclick="pressKey('7')">7</button>
+        <button class="key-btn" onclick="pressKey('8')">8</button>
+        <button class="key-btn" onclick="pressKey('9')">9</button>
+        <button class="key-btn" onclick="clearPin()">C</button>
+        <button class="key-btn" onclick="pressKey('0')">0</button>
+        <button class="key-btn" onclick="checkPin()">❤️</button>
+      </div>
+    </div>
+    <div class="gifts-container" id="giftsArea">
+      <div class="gift-box" onclick="alert('🎁 رسالة خاصة: أنتِ أجمَل ما حدث في حياتي!')">🎁</div>
+      <div class="gift-box" onclick="alert('🎵 أغنيتنا المفضلة تعمل دائماً في قلبي!')">🎧</div>
+      <div class="gift-box" onclick="alert('💐 وردة دائمة لا تذبل أبداً!')">🌹</div>
+    </div>
+  </div>
+
+  <!-- القسم الثاني: تفتح الزهرة -->
+  <div class="section-card">
+    <div class="section-title">زهرة مخصصة لكِ 🌸</div>
+    <div class="flower-container" id="flowerContainer">
+      <div class="stem" id="stem"></div>
+    </div>
+    <button class="action-btn" id="bloomBtn" onclick="bloomFlower()">اضغطي للتفتيح ✨</button>
+    <p id="flowerText" style="margin-top:15px; display:none; color: var(--text-sub);">I coded this for you ❤️</p>
+  </div>
+
+  <!-- القسم الثالث: اختيار الحب -->
+  <div class="section-card">
+    <div class="section-title">سؤال سري للغاية 💌</div>
+    <div class="game-box">
+      <p>هل ما زلتِ تحبينني بنفس القدر؟</p>
+      <div class="btn-group">
+        <button class="action-btn" style="margin:0;" onclick="acceptLove()">نعم أفقياً! ❤️</button>
+        <button id="noBtn" onmouseover="moveNoBtn()" onclick="moveNoBtn()">لا 😜</button>
+      </div>
+      <p id="loveResult" style="margin-top: 15px; color: var(--text-sub);"></p>
+    </div>
+  </div>
+
+  <!-- القسم الرابع: تشكيل القلب التفاعلي -->
+  <div class="section-card">
+    <div class="section-title">قلب بداخل كود 💖</div>
+    <canvas id="heartCanvas" class="particle-canvas"></canvas>
+    <button class="action-btn" onclick="drawParticleHeart()">ارسمي القلب ✨</button>
+  </div>
+
+  <script>
+    // --- 1. Passcode Script ---
+    const SECRET_PIN = "1234"; // يمكن تغيير رمز السر هنا
+    let currentInput = "";
+
+    function pressKey(num) {
+      if (currentInput.length < 4) {
+        currentInput += num;
+        updateDots();
+      }
+    }
+
+    function clearPin() {
+      currentInput = "";
+      updateDots();
+    }
+
+    function updateDots() {
+      const dots = document.querySelectorAll('.pin-dot');
+      dots.forEach((dot, index) => {
+        if (index < currentInput.length) {
+          dot.classList.add('filled');
+        } else {
+          dot.classList.remove('filled');
+        }
+      });
+    }
+
+    function checkPin() {
+      if (currentInput === SECRET_PIN) {
+        document.getElementById('passcodeArea').style.display = 'none';
+        document.getElementById('giftsArea').style.display = 'flex';
+      } else {
+        alert("رمز السر غير صحيح، حاولي مجدداً!");
+        clearPin();
+      }
+    }
+
+    // --- 2. Bloom Flower Script ---
+    function bloomFlower() {
+      const stem = document.getElementById('stem');
+      const container = document.getElementById('flowerContainer');
+      const btn = document.getElementById('bloomBtn');
+      const text = document.getElementById('flowerText');
+
+      btn.style.display = 'none';
+      stem.style.height = '140px';
+
+      setTimeout(() => {
+        const petalCount = 8;
+        for (let i = 0; i < petalCount; i++) {
+          const petal = document.createElement('div');
+          petal.className = 'petal';
+          const angle = (360 / petalCount) * i;
+          container.appendChild(petal);
+
+          setTimeout(() => {
+            petal.style.opacity = '1';
+            petal.style.transform = `rotate(${angle}deg) translateY(-25px)`;
+          }, i * 120);
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        text.style.display = 'block';
+      }, 2500);
+    }
+
+    // --- 3. Cupid Game Script ---
+    function moveNoBtn() {
+      const btn = document.getElementById('noBtn');
+      const x = Math.floor(Math.random() * 160) - 80;
+      const y = Math.floor(Math.random() * 80) - 40;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function acceptLove() {
+      document.getElementById('loveResult').innerText = "كنت أعلم ذلك! وأنا أحبكِ أكثر دائماً! 💕";
+      document.getElementById('noBtn').style.display = 'none';
+    }
+
+    // --- 4. Particle Heart Canvas ---
+    function drawParticleHeart() {
+      const canvas = document.getElementById('heartCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const particles = [];
+      const total = 180;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2 - 10;
+
+      for (let i = 0; i < total; i++) {
+        const t = (Math.PI * 2 / total) * i;
+        const x = 12 * Math.sin(t) ** 3;
+        const y = -(10 * Math.cos(t) - 4 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+        
+        particles.push({
+          x: cx,
+          y: cy,
+          tx: cx + x * 8,
+          ty: cy + y * 8,
+          color: '#ff477e'
+        });
+      }
+
+      let pIndex = 0;
+      function animate() {
+        if (pIndex < particles.length) {
+          const p = particles[pIndex];
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.tx, p.ty, 3, 0, Math.PI * 2);
+          ctx.fill();
+          pIndex++;
+          requestAnimationFrame(animate);
+        } else {
+          ctx.font = "bold 16px sans-serif";
+          ctx.fillStyle = "#ffffff";
+          ctx.textAlign = "center";
+          ctx.fillText("I Love You", cx, cy + 8);
+        }
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>
