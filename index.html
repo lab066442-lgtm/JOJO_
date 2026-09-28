@@ -2,198 +2,270 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Love.css - 3D Rose</title>
+  <title>Love.css - 3D Bloom</title>
   <style>
     body {
-      background-color: #070002;
+      background: #080003;
+      margin: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
       overflow: hidden;
-      /* السر هنا: بناء عمق ثلاثي الأبعاد */
-      perspective: 1200px; 
+      /* السر هنا لإنشاء العمق ثلاثي الأبعاد المطابق للفيديو */
+      perspective: 1200px;
     }
 
-    /* حاوية الزهرة مائلة قليلاً لرؤية العمق */
+    /* 1. واجهة الكارد الزجاجي (Glassmorphism Card) */
+    #ui-card {
+      background: rgba(20, 5, 10, 0.6);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 50, 80, 0.15);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 100;
+      width: 280px;
+    }
+
+    .rose-icon { font-size: 36px; margin-bottom: 10px; }
+    h2 { margin: 0 0 15px 0; font-size: 24px; color: #fff; letter-spacing: 1px;}
+    
+    #status { 
+      color: #ff8da1; 
+      font-size: 13px; 
+      margin-bottom: 25px; 
+      min-height: 20px; 
+      font-family: 'Courier New', monospace;
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 50, 80, 0.3);
+      color: rgba(255, 255, 255, 0.3);
+      padding: 14px 0;
+      width: 100%;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      cursor: not-allowed;
+      transition: all 0.3s;
+    }
+
+    /* زر التفتيح بعد انتهاء التحميل */
+    button.ready {
+      background: #e6194b;
+      color: white;
+      border-color: #ff3366;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(230, 25, 75, 0.4);
+    }
+    button.ready:hover { 
+      background: #ff3366; 
+      transform: translateY(-2px); 
+    }
+
+    /* 2. المشهد ثلاثي الأبعاد والساق (3D Scene & Stem) */
+    #scene {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-style: preserve-3d;
+      transform: rotateX(-15deg); /* إمالة المشهد للأسفل قليلاً لرؤية عمق الزهرة */
+    }
+
     #flower {
       position: relative;
-      width: 0;
-      height: 0;
       transform-style: preserve-3d;
-      transform: rotateX(-15deg); 
+      top: 50px;
     }
 
-    .stem {
+    #stem {
       position: absolute;
-      width: 8px;
-      height: 280px;
-      background: linear-gradient(to right, #113811, #256b25, #113811);
-      border-radius: 4px;
-      top: 0;
       left: -4px;
-      box-shadow: 0 0 15px rgba(37, 107, 37, 0.4);
+      top: 0;
+      width: 8px;
+      height: 0; /* الساق ينمو من 0 إلى 350 بكسل */
+      background: linear-gradient(to right, #0a2e0a, #1a5c1a, #0a2e0a);
+      border-radius: 4px;
+      transform-origin: top center;
+      transition: height 2s ease-in-out;
+      box-shadow: 0 0 15px rgba(26, 92, 26, 0.4);
     }
 
+    /* 3. خصائص البتلة بناءً على معادلات الجافاسكريبت المرفقة بالفيديو */
     .petal {
       position: absolute;
       bottom: 0;
+      left: 0;
       transform-origin: bottom center;
-      border-radius: 50% 50% 20% 20%;
-      /* تدرج لوني يعطي واقعية لظل البتلات */
-      background: linear-gradient(to top, #4a0008, #cc0022 50%, #ff1a40);
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 0 10px rgba(204, 0, 34, 0.2);
+      background: linear-gradient(to bottom, #f2003c, #7a0010);
+      border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.2);
       opacity: 0;
+      /* حالة الإغلاق (برعم) */
+      transform: translateX(-50%) rotateY(var(--ry)) rotateX(5deg) scale(0);
+      /* استخدام المتغيرات لعمل حركة ديناميكية لكل بتلة */
+      transition: transform var(--dur) cubic-bezier(0.2, 0.8, 0.2, 1) var(--del), opacity 0.5s ease var(--del);
+      backface-visibility: hidden;
     }
 
-    /* تصميم واجهة البداية */
-    .ui-container {
+    /* الوجه الخلفي للبتلات أغمق ليعطي واقعية */
+    .petal::after {
+      content: "";
       position: absolute;
-      z-index: 10;
-      text-align: center;
-      background: rgba(20, 5, 10, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 26, 64, 0.2);
-      transition: opacity 1s;
-    }
-    
-    .ui-container h1 {
-      color: #ff1a40;
-      margin: 0 0 10px;
-      font-size: 26px;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      border-radius: inherit;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
     }
 
-    .ui-container p {
-      color: #ff99aa;
-      margin: 0 0 25px;
-      font-size: 14px;
+    /* حالة التفتح */
+    .petal.bloomed {
+      opacity: 1;
+      transform: translateX(-50%) rotateY(var(--ry)) rotateX(var(--rx)) scale(var(--scale));
     }
 
-    .bloom-btn {
-      background: #cc0022;
-      color: white;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .bloom-btn:hover {
-      background: #ff1a40;
-      transform: scale(1.05);
-    }
-
-    /* النص النهائي */
-    .final-text {
+    /* 4. النص الختامي */
+    #finalText {
       position: absolute;
       bottom: 12%;
-      color: #ff99aa;
-      font-size: 22px;
-      font-family: serif;
+      font-family: 'Georgia', serif;
       font-style: italic;
+      font-size: 24px;
+      color: #ffb3c6;
       opacity: 0;
-      transition: opacity 2s;
-      text-shadow: 0 0 10px rgba(255, 26, 64, 0.6);
+      transition: opacity 2s ease;
+      text-shadow: 0 0 15px rgba(255, 50, 80, 0.6);
+      z-index: 50;
     }
   </style>
 </head>
 <body>
 
-  <!-- واجهة البداية -->
-  <div class="ui-container" id="ui">
-    <h1>🌹 Love.css</h1>
-    <p>Ready to bloom!</p>
-    <button class="bloom-btn" onclick="startBloom()">TAP TO BLOOM</button>
+  <!-- واجهة البطاقة الزجاجية -->
+  <div id="ui-card">
+    <div class="rose-icon">🌹</div>
+    <h2>Love.css</h2>
+    <div id="status">Loading love.css...</div>
+    <button id="bloomBtn">TAP TO BLOOM</button>
   </div>
 
-  <!-- الزهرة -->
-  <div id="flower">
-    <div class="stem" id="stem" style="display: none;"></div>
+  <!-- حاوية الزهرة ثلاثية الأبعاد -->
+  <div id="scene">
+    <div id="flower">
+      <div id="stem"></div>
+    </div>
   </div>
 
-  <!-- رسالة النهاية -->
-  <div class="final-text" id="finalText">I coded this for you ❤️</div>
+  <div id="finalText">I coded this for you ❤️</div>
 
   <script>
-    const flower = document.getElementById('flower');
+    const statusEl = document.getElementById('status');
+    const btn = document.getElementById('bloomBtn');
+    const card = document.getElementById('ui-card');
     const stem = document.getElementById('stem');
-    const ui = document.getElementById('ui');
+    const flower = document.getElementById('flower');
     const finalText = document.getElementById('finalText');
 
-    // توزيع طبقات البتلات من الخارج للداخل (محاكاة دقيقة للمقطع)
-    const PETAL_LAYERS = [
-      { count: 14, w: 75, h: 110, rotXOpen: 75, delay: 0 },
-      { count: 12, w: 65, h: 100, rotXOpen: 60, delay: 0.4 },
-      { count: 10, w: 55, h: 90,  rotXOpen: 45, delay: 0.8 },
-      { count: 8,  w: 45, h: 80,  rotXOpen: 30, delay: 1.2 },
-      { count: 5,  w: 35, h: 70,  rotXOpen: 15, delay: 1.6 },
-      { count: 3,  w: 25, h: 60,  rotXOpen: 5,  delay: 2.0 }
+    // 1. تسلسل رسائل التحميل المطابق تماماً للفيديو
+    const loadingTexts = [
+      "Loading love.css...",
+      "Growing digital petals...",
+      "Optimizing 3D rendering...",
+      "Ready to bloom!"
     ];
 
-    function startBloom() {
-      // إخفاء الواجهة
-      ui.style.opacity = '0';
-      setTimeout(() => ui.style.display = 'none', 1000);
+    let textIdx = 0;
+    const loadingInterval = setInterval(() => {
+      textIdx++;
+      if (textIdx >= loadingTexts.length) {
+        clearInterval(loadingInterval);
+        btn.classList.add('ready');
+        btn.disabled = false;
+      } else {
+        statusEl.innerText = loadingTexts[textIdx];
+      }
+    }, 1200);
 
-      // إظهار الساق
-      stem.style.display = 'block';
+    // 2. توزيع طبقات الزهرة (نفس المتغيرات الرياضية الموجودة في كود الفيديو)
+    const PETAL_LAYERS = [
+      { count: 4,  w: 45,  h: 65,  rot: 12, delayBase: 0.1 },
+      { count: 6,  w: 55,  h: 85,  rot: 28, delayBase: 0.4 },
+      { count: 9,  w: 70,  h: 110, rot: 45, delayBase: 0.8 },
+      { count: 12, w: 90,  h: 135, rot: 60, delayBase: 1.2 },
+      { count: 15, w: 110, h: 155, rot: 78, delayBase: 1.6 }
+    ];
 
-      let allPetals = [];
-
-      // بناء البتلات برمجياً (DOM Elements)
-      PETAL_LAYERS.forEach((layer, layerIdx) => {
+    function createPetals() {
+      // نفس حلقة forEach الموجودة في محرر الكود داخل الفيديو
+      PETAL_LAYERS.forEach((layer, li) => {
         const angleStep = 360 / layer.count;
-        const layerOffset = layerIdx * 15; // تدوير الطبقات لتتداخل
+        const layerOffset = li * 14 + (Math.random() * 0.5);
 
         for (let i = 0; i < layer.count; i++) {
           const petal = document.createElement('div');
           petal.className = 'petal';
           
-          // تحديد الأبعاد لكل طبقة
-          petal.style.width = layer.w + 'px';
-          petal.style.height = layer.h + 'px';
-          petal.style.left = -(layer.w / 2) + 'px'; // توسيط البتلة
+          // الحسابات العشوائية لإعطاء التفتح شكلاً طبيعياً
+          const angle = layerOffset + (i * angleStep) + ((Math.random() - 0.5) * 8);
+          const delay = layer.delayBase + (i * 0.05);
+          const curlJitter = (Math.random() - 0.5) * 12;
+          const scaleJitter = 0.9 + Math.random() * 0.2;
+          const duration = 2.5 + Math.random(); // مدة الحركة
 
-          const rotY = layerOffset + (i * angleStep);
+          petal.style.width = `${layer.w}px`;
+          petal.style.height = `${layer.h}px`;
           
-          // تبدأ البتلات مغلقة (محاذاة عمودية تقريباً)
-          petal.style.transform = `rotateY(${rotY}deg) rotateX(5deg)`;
-          petal.style.transition = 'transform 3s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 1.5s ease';
+          // تمرير القيم لملف الـ CSS عبر المتغيرات (CSS Variables)
+          petal.style.setProperty('--ry', `${angle}deg`);
+          petal.style.setProperty('--rx', `${layer.rot + curlJitter}deg`);
+          petal.style.setProperty('--del', `${delay}s`);
+          petal.style.setProperty('--dur', `${duration}s`);
+          petal.style.setProperty('--scale', scaleJitter);
 
           flower.appendChild(petal);
-          
-          // تخزين بيانات الحركة لكل بتلة لفتحها لاحقاً
-          allPetals.push({
-            element: petal,
-            rotY: rotY,
-            rotXOpen: layer.rotXOpen + (Math.random() * 10 - 5), // عشوائية خفيفة لتبدو طبيعية
-            delay: layer.delay + (Math.random() * 0.3) // تأخير متدرج
-          });
         }
       });
+    }
 
-      // تشغيل أنيميشن التفتّح
+    // 3. تفعيل الحدث عند الضغط على الزر
+    btn.addEventListener('click', () => {
+      if(!btn.classList.contains('ready')) return;
+      
+      // إخفاء البطاقة
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.9)';
+      setTimeout(() => { card.style.display = 'none'; }, 500);
+
+      // بناء البتلات في الـ DOM
+      createPetals();
+
+      // نمو الساق
       setTimeout(() => {
-        allPetals.forEach(p => {
-          setTimeout(() => {
-            p.element.style.opacity = '0.95';
-            // حركة التفتح الأساسية
-            p.element.style.transform = `rotateY(${p.rotY}deg) rotateX(${p.rotXOpen}deg)`;
-          }, p.delay * 1000);
-        });
-      }, 300);
+        stem.style.height = '350px';
+      }, 200);
 
-      // ظهور النص النهائي بعد التفتح
+      // إطلاق حركة التفتح (Bloom) لجميع البتلات
+      setTimeout(() => {
+        const allPetals = document.querySelectorAll('.petal');
+        allPetals.forEach(p => p.classList.add('bloomed'));
+      }, 700);
+
+      // إظهار النص النهائي بعد اكتمال التفتح
       setTimeout(() => {
         finalText.style.opacity = '1';
       }, 4500);
-    }
+    });
   </script>
 </body>
 </html>
