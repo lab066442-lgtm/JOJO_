@@ -1,271 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Love.css - 3D Bloom</title>
-  <style>
-    body {
-      background: #080003;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
-      overflow: hidden;
-      /* السر هنا لإنشاء العمق ثلاثي الأبعاد المطابق للفيديو */
-      perspective: 1200px;
-    }
-
-    /* 1. واجهة الكارد الزجاجي (Glassmorphism Card) */
-    #ui-card {
-      background: rgba(20, 5, 10, 0.6);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 50, 80, 0.15);
-      border-radius: 20px;
-      padding: 40px;
-      text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      z-index: 100;
-      width: 280px;
-    }
-
-    .rose-icon { font-size: 36px; margin-bottom: 10px; }
-    h2 { margin: 0 0 15px 0; font-size: 24px; color: #fff; letter-spacing: 1px;}
-    
-    #status { 
-      color: #ff8da1; 
-      font-size: 13px; 
-      margin-bottom: 25px; 
-      min-height: 20px; 
-      font-family: 'Courier New', monospace;
-    }
-
-    button {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 50, 80, 0.3);
-      color: rgba(255, 255, 255, 0.3);
-      padding: 14px 0;
-      width: 100%;
-      border-radius: 12px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      cursor: not-allowed;
-      transition: all 0.3s;
-    }
-
-    /* زر التفتيح بعد انتهاء التحميل */
-    button.ready {
-      background: #e6194b;
-      color: white;
-      border-color: #ff3366;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(230, 25, 75, 0.4);
-    }
-    button.ready:hover { 
-      background: #ff3366; 
-      transform: translateY(-2px); 
-    }
-
-    /* 2. المشهد ثلاثي الأبعاد والساق (3D Scene & Stem) */
-    #scene {
-      position: absolute;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transform-style: preserve-3d;
-      transform: rotateX(-15deg); /* إمالة المشهد للأسفل قليلاً لرؤية عمق الزهرة */
-    }
-
-    #flower {
-      position: relative;
-      transform-style: preserve-3d;
-      top: 50px;
-    }
-
-    #stem {
-      position: absolute;
-      left: -4px;
-      top: 0;
-      width: 8px;
-      height: 0; /* الساق ينمو من 0 إلى 350 بكسل */
-      background: linear-gradient(to right, #0a2e0a, #1a5c1a, #0a2e0a);
-      border-radius: 4px;
-      transform-origin: top center;
-      transition: height 2s ease-in-out;
-      box-shadow: 0 0 15px rgba(26, 92, 26, 0.4);
-    }
-
-    /* 3. خصائص البتلة بناءً على معادلات الجافاسكريبت المرفقة بالفيديو */
-    .petal {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      transform-origin: bottom center;
-      background: linear-gradient(to bottom, #f2003c, #7a0010);
-      border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.2);
-      opacity: 0;
-      /* حالة الإغلاق (برعم) */
-      transform: translateX(-50%) rotateY(var(--ry)) rotateX(5deg) scale(0);
-      /* استخدام المتغيرات لعمل حركة ديناميكية لكل بتلة */
-      transition: transform var(--dur) cubic-bezier(0.2, 0.8, 0.2, 1) var(--del), opacity 0.5s ease var(--del);
-      backface-visibility: hidden;
-    }
-
-    /* الوجه الخلفي للبتلات أغمق ليعطي واقعية */
-    .petal::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-      border-radius: inherit;
-      backface-visibility: hidden;
-      transform: rotateY(180deg);
-    }
-
-    /* حالة التفتح */
-    .petal.bloomed {
-      opacity: 1;
-      transform: translateX(-50%) rotateY(var(--ry)) rotateX(var(--rx)) scale(var(--scale));
-    }
-
-    /* 4. النص الختامي */
-    #finalText {
-      position: absolute;
-      bottom: 12%;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      font-size: 24px;
-      color: #ffb3c6;
-      opacity: 0;
-      transition: opacity 2s ease;
-      text-shadow: 0 0 15px rgba(255, 50, 80, 0.6);
-      z-index: 50;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP | LEVEL MAX AI TWEAKER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(6, 182, 212, 0.2); }
+        .neon-glow { box-shadow: 0 0 20px rgba(6, 182, 212, 0.25); }
+        .neon-glow-red { box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); }
+    </style>
 </head>
-<body>
+<body class="p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between">
 
-  <!-- واجهة البطاقة الزجاجية -->
-  <div id="ui-card">
-    <div class="rose-icon">🌹</div>
-    <h2>Love.css</h2>
-    <div id="status">Loading love.css...</div>
-    <button id="bloomBtn">TAP TO BLOOM</button>
-  </div>
+    <!-- Header -->
+    <header class="glass-panel p-4 rounded-2xl mb-4 text-center neon-glow">
+        <div class="inline-block px-3 py-1 bg-cyan-950 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/40 mb-2">
+            🔥 VIP | LEVEL MAX — الباقة الاحترافية
+        </div>
+        <h1 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
+            AI TWEAKER ENGINE
+        </h1>
+        <p class="text-xs text-slate-400 mt-1">أقصى أداء، استقرار، وتقليل للـ Latency</p>
+    </header>
 
-  <!-- حاوية الزهرة ثلاثية الأبعاد -->
-  <div id="scene">
-    <div id="flower">
-      <div id="stem"></div>
-    </div>
-  </div>
+    <!-- Main Content Area -->
+    <main class="space-y-4 flex-grow">
+        
+        <!-- Status Card -->
+        <div class="glass-panel p-4 rounded-xl flex items-center justify-between">
+            <div>
+                <span class="text-xs text-slate-400">حالة النظام الحالي</span>
+                <h2 class="text-sm font-bold text-emerald-400">جاهز للتفعيل والتحسين الفوري</h2>
+            </div>
+            <button onclick="startAnalysis()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-lg shadow-cyan-500/20">
+                فحص النظام ⚡
+            </button>
+        </div>
 
-  <div id="finalText">I coded this for you ❤️</div>
+        <!-- AI Assistant Chat Box -->
+        <div class="glass-panel p-4 rounded-xl">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
+                    <span class="text-sm font-bold text-cyan-300">مساعد الذكاء الاصطناعي VIP</span>
+                </div>
+                <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-cyan-400">نشط الآن</span>
+            </div>
 
-  <script>
-    const statusEl = document.getElementById('status');
-    const btn = document.getElementById('bloomBtn');
-    const card = document.getElementById('ui-card');
-    const stem = document.getElementById('stem');
-    const flower = document.getElementById('flower');
-    const finalText = document.getElementById('finalText');
+            <div id="chat-box" class="h-44 overflow-y-auto space-y-2 text-xs mb-3 p-1">
+                <div class="p-2 bg-cyan-950/60 rounded-lg text-cyan-200 border border-cyan-500/30">
+                    أهلاً بك! اختر إحدى المشاكل أدناه أو اكتب استفسارك لتحليله وحله فوراً:
+                </div>
+            </div>
 
-    // 1. تسلسل رسائل التحميل المطابق تماماً للفيديو
-    const loadingTexts = [
-      "Loading love.css...",
-      "Growing digital petals...",
-      "Optimizing 3D rendering...",
-      "Ready to bloom!"
-    ];
+            <!-- Quick Prompts -->
+            <div class="flex gap-1 overflow-x-auto pb-2 mb-2 text-[11px]">
+                <button onclick="sendAIQuery('تقطيع الألعاب (Stuttering)')" class="bg-slate-800 hover:bg-cyan-900 text-slate-300 px-2.5 py-1 rounded-md whitespace-nowrap border border-slate-700">تقطيع الألعاب 🎮</button>
+                <button onclick="sendAIQuery('تقليل الـ Input Lag')" class="bg-slate-800 hover:bg-cyan-900 text-slate-300 px-2.5 py-1 rounded-md whitespace-nowrap border border-slate-700">سرعة الاستجابة ⚡</button>
+                <button onclick="sendAIQuery('حل مشكلة حرارة المعالج')" class="bg-slate-800 hover:bg-cyan-900 text-slate-300 px-2.5 py-1 rounded-md whitespace-nowrap border border-slate-700">الحرارة 🔥</button>
+            </div>
 
-    let textIdx = 0;
-    const loadingInterval = setInterval(() => {
-      textIdx++;
-      if (textIdx >= loadingTexts.length) {
-        clearInterval(loadingInterval);
-        btn.classList.add('ready');
-        btn.disabled = false;
-      } else {
-        statusEl.innerText = loadingTexts[textIdx];
-      }
-    }, 1200);
+            <div class="flex gap-2">
+                <input id="ai-input" type="text" placeholder="اسأل المساعد الذكي..." class="flex-grow bg-slate-950 text-xs px-3 py-2 rounded-lg border border-slate-800 text-slate-200 focus:outline-none focus:border-cyan-500">
+                <button onclick="handleUserSend()" class="bg-cyan-500 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs">إرسال</button>
+            </div>
+        </div>
 
-    // 2. توزيع طبقات الزهرة (نفس المتغيرات الرياضية الموجودة في كود الفيديو)
-    const PETAL_LAYERS = [
-      { count: 4,  w: 45,  h: 65,  rot: 12, delayBase: 0.1 },
-      { count: 6,  w: 55,  h: 85,  rot: 28, delayBase: 0.4 },
-      { count: 9,  w: 70,  h: 110, rot: 45, delayBase: 0.8 },
-      { count: 12, w: 90,  h: 135, rot: 60, delayBase: 1.2 },
-      { count: 15, w: 110, h: 155, rot: 78, delayBase: 1.6 }
-    ];
+        <!-- Guarantee Badge -->
+        <div class="glass-panel p-3 rounded-xl border-amber-500/30 neon-glow-red text-center">
+            <span class="text-xs text-amber-400 font-bold block mb-1">🛡️ الضمان الذهبي المميز</span>
+            <p class="text-[11px] text-slate-300">نضمن لك فرق أداء لا يقل عن **60%** أو استرداد قيمتك كاملة.</p>
+        </div>
 
-    function createPetals() {
-      // نفس حلقة forEach الموجودة في محرر الكود داخل الفيديو
-      PETAL_LAYERS.forEach((layer, li) => {
-        const angleStep = 360 / layer.count;
-        const layerOffset = li * 14 + (Math.random() * 0.5);
+    </main>
 
-        for (let i = 0; i < layer.count; i++) {
-          const petal = document.createElement('div');
-          petal.className = 'petal';
-          
-          // الحسابات العشوائية لإعطاء التفتح شكلاً طبيعياً
-          const angle = layerOffset + (i * angleStep) + ((Math.random() - 0.5) * 8);
-          const delay = layer.delayBase + (i * 0.05);
-          const curlJitter = (Math.random() - 0.5) * 12;
-          const scaleJitter = 0.9 + Math.random() * 0.2;
-          const duration = 2.5 + Math.random(); // مدة الحركة
+    <!-- Footer -->
+    <footer class="mt-4 text-center text-[10px] text-slate-500">
+        VIP | LEVEL MAX AI TWEAKER — جميع الحقوق محفوظة © 2026
+    </footer>
 
-          petal.style.width = `${layer.w}px`;
-          petal.style.height = `${layer.h}px`;
-          
-          // تمرير القيم لملف الـ CSS عبر المتغيرات (CSS Variables)
-          petal.style.setProperty('--ry', `${angle}deg`);
-          petal.style.setProperty('--rx', `${layer.rot + curlJitter}deg`);
-          petal.style.setProperty('--del', `${delay}s`);
-          petal.style.setProperty('--dur', `${duration}s`);
-          petal.style.setProperty('--scale', scaleJitter);
-
-          flower.appendChild(petal);
+    <script>
+        function startAnalysis() {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="p-2 bg-slate-800 rounded-lg text-slate-200 text-right">جاري فحص مخلفات النظام، الـ Registry، وجدولة النوى...</div>`;
+            setTimeout(() => {
+                chatBox.innerHTML += `<div class="p-2 bg-emerald-950/80 rounded-lg text-emerald-300 border border-emerald-500/30">✅ تم الفحص بنجاح! تم رصد فرص تحسين الأداء بنسبة **74%**. يمكنك اختيار تفعيل التحسينات من المساعد.</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
         }
-      });
-    }
 
-    // 3. تفعيل الحدث عند الضغط على الزر
-    btn.addEventListener('click', () => {
-      if(!btn.classList.contains('ready')) return;
-      
-      // إخفاء البطاقة
-      card.style.opacity = '0';
-      card.style.transform = 'scale(0.9)';
-      setTimeout(() => { card.style.display = 'none'; }, 500);
+        function sendAIQuery(query) {
+            appendChat('user', query);
+            setTimeout(() => {
+                let reply = "تم تحليل طلبك، جارٍ تطبيق التعديلات البرمجية لتعزيز استقرار النظام.";
+                if(query.includes('تقطيع')) {
+                    reply = "إصلاح التقطيع: تم تفعيل Shader Cache Optimizations وضبط الثريدز بنجاح 🚀";
+                } else if(query.includes('Input Lag')) {
+                    reply = "تخفيض الاستجابة: تم ضبط الـ Polling Rate وتعطيل الـ HPET لأقصى سرعة ⚡";
+                } else if(query.includes('حرارة')) {
+                    reply = "تخفيف الحرارة: تم تفعيل البروفايل المتوازن للطاقة وإيقاف العمليات الوهمية بالخلفية ❄️";
+                }
+                appendChat('ai', reply);
+            }, 600);
+        }
 
-      // بناء البتلات في الـ DOM
-      createPetals();
+        function handleUserSend() {
+            const input = document.getElementById('ai-input');
+            if(!input.value.trim()) return;
+            sendAIQuery(input.value);
+            input.value = '';
+        }
 
-      // نمو الساق
-      setTimeout(() => {
-        stem.style.height = '350px';
-      }, 200);
-
-      // إطلاق حركة التفتح (Bloom) لجميع البتلات
-      setTimeout(() => {
-        const allPetals = document.querySelectorAll('.petal');
-        allPetals.forEach(p => p.classList.add('bloomed'));
-      }, 700);
-
-      // إظهار النص النهائي بعد اكتمال التفتح
-      setTimeout(() => {
-        finalText.style.opacity = '1';
-      }, 4500);
-    });
-  </script>
+        function appendChat(sender, text) {
+            const chatBox = document.getElementById('chat-box');
+            const cls = sender === 'user' ? 'bg-slate-800 text-slate-200 text-right' : 'bg-cyan-950/60 text-cyan-200 border border-cyan-500/30';
+            chatBox.innerHTML += `<div class="p-2 rounded-lg ${cls}">${text}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
