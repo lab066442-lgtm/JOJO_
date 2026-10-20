@@ -1,0 +1,6 @@
+Place your actual .glb files in this folder.
+The current loader automatically tries:
+- /assets/models/character.glb
+
+Additional model loading hooks are ready for future systems.
+Do not rename the folder.
